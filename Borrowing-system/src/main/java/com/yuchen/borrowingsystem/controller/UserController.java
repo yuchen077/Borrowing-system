@@ -1,11 +1,13 @@
 package com.yuchen.borrowingsystem.controller;
 
+import com.yuchen.borrowingsystem.dto.UserLoginRequest;
 import com.yuchen.borrowingsystem.dto.UserRegisterRequest;
 import com.yuchen.borrowingsystem.model.User;
 import com.yuchen.borrowingsystem.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -26,5 +28,13 @@ public class UserController {
         User user = userService.getUserById(userId);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(user);
+    }
+
+    @PostMapping("/users/login")
+    public ResponseEntity<User> login(@RequestBody @Valid UserLoginRequest userLoginRequest){
+        User user = userService.login(userLoginRequest);
+
+        return ResponseEntity.status(HttpStatus.OK).body(user);
+
     }
 }

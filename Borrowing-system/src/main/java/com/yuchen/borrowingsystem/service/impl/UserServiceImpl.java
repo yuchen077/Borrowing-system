@@ -1,6 +1,7 @@
 package com.yuchen.borrowingsystem.service.impl;
 
 import com.yuchen.borrowingsystem.dao.UserDao;
+import com.yuchen.borrowingsystem.dto.UserLoginRequest;
 import com.yuchen.borrowingsystem.dto.UserRegisterRequest;
 import com.yuchen.borrowingsystem.model.User;
 import com.yuchen.borrowingsystem.service.UserService;
@@ -36,5 +37,23 @@ public class UserServiceImpl implements UserService {
 
         //創建帳號
         return userDao.createUser(userRegisterRequest);
+    }
+
+    @Override
+    public User login(UserLoginRequest userLoginRequest) {
+        User user = userDao.getUserByPhoneNumber(userLoginRequest.getPhoneNumber());
+
+        if(user == null){
+            log.warn("該手機 {} 尚未註冊", userLoginRequest.getPhoneNumber());
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        }
+
+        if(user.getPassword().equals(userLoginRequest.getPassword())){
+            return user;
+        }
+        else{
+            log.warn("手機 {} 的密碼不正確", userLoginRequest.getPhoneNumber());
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        }
     }
 }
