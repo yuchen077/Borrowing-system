@@ -1,11 +1,15 @@
 package com.yuchen.borrowingsystem.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.sql.Date;
 
 public class User {
 
     private Integer userId;
     private String phoneNumber;
+
+    @JsonIgnore
     private String password;
     private String userName;
     private Date registrationTime;
