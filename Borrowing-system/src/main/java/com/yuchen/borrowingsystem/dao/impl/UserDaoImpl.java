@@ -37,6 +37,24 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
+    public User getUserByPhoneNumber(String phoneNumber) {
+        String sql = "SELECT * " +
+                     "  FROM user WHERE phone_number = :phoneNumber";
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("phoneNumber", phoneNumber);
+
+        List<User> userList = namedParameterJdbcTemplate.query(sql, map, new UserRowMapper());
+
+        if(userList.size() > 0 ){
+            return userList.get(0);
+        }
+        else{
+            return null;
+        }
+    }
+
+    @Override
     public Integer createUser(UserRegisterRequest userRegisterRequest) {
         String sql = "INSERT INTO user(phone_number, password, user_name, registration_time, last_modifiedtime, last_login_time)" +
                      "VALUES (:phoneNumber, :password, :userName, :registrationTime, :lastModifiedtime, :lastLoginTime)";
